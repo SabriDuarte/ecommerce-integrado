@@ -51,9 +51,15 @@ function Dashboard() {
           <Col key={product._id} md={4} className="mb-3">
             <Card>
               <Card.Body>
-                <Card.Title>{product.name}</Card.Title>
-                <Card.Text>Precio: ${product.price}</Card.Text>
-                <Card.Text>Categoría: {product.category}</Card.Text>
+                <Card.Title>{product.nombre}</Card.Title>
+                <Card.Text>Precio: ${product.precio}</Card.Text>
+                <Card.Text>Descripción: {product.description}</Card.Text>
+                <Card.Img
+                  variant="top"
+                  src={product.imagen || 'https://via.placeholder.com/300x200?text=Sin+Imagen'}
+                  alt={product.nombre}
+                />
+
                 <Button variant="success" onClick={() => addToCart(product)}>
                   Agregar al carrito
                 </Button>

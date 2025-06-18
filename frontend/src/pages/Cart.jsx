@@ -1,10 +1,8 @@
 import { useCartStore } from '../store/cartStore'
-import { Container, Table, Button } from 'react-bootstrap'
+import { Container, Table, Button, Card} from 'react-bootstrap'
 
 function Cart() {
-  const { cart, removeFromCart, clearCart } = useCartStore()
-
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const { cart, increaseQuantity, decreaseQuantity, removeFromCart, clearCart } = useCartStore()
 
   return (
     <Container className="mt-5">
@@ -13,34 +11,24 @@ function Cart() {
         <p>Tu carrito está vacío</p>
       ) : (
         <>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Categoría</th>
-                <th>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cart.map((item) => (
-                <tr key={item._id}>
-                  <td>{item.name}</td>
-                  <td>${item.price}</td>
-                  <td>{item.category}</td>
-                  <td>
-                    <Button variant="danger" onClick={() => removeFromCart(item._id)}>
-                      X
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <h4>Total: ${total}</h4>
-          <Button variant="warning" onClick={clearCart}>
-            Vaciar carrito
-          </Button>
+           {cart.map((item) => (
+            <Card key={item._id} className="mb-3">
+              <Card.Body>
+                <Card.Title>{item.name}</Card.Title>
+                <Card.Text>Precio: ${item.price}</Card.Text>
+                <Card.Text>Cantidad: {item.quantity}</Card.Text>
+                <Button variant="secondary" onClick={() => decreaseQuantity(item._id)}>-</Button>{' '}
+                <Button variant="secondary" onClick={() => increaseQuantity(item._id)}>+</Button>{' '}
+                <Button variant="danger" onClick={() => removeFromCart(item._id)}>Eliminar</Button>
+              </Card.Body>
+            </Card>
+          ))}
+
+          <h4 className="mt-3">
+            Total: ${cart.reduce((acc, item) => acc + item.price * item.quantity, 0)}
+          </h4>
+
+          <Button variant="outline-danger" onClick={clearCart} className="mt-2">Vaciar carrito</Button>
         </>
       )}
     </Container>

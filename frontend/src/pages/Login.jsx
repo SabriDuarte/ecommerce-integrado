@@ -3,6 +3,7 @@ import { login } from '../services/authService'
 import useAuthStore from '../store/authStore'
 import { useNavigate } from 'react-router-dom'
 import { Button, Form, Container } from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -35,6 +36,7 @@ function Login() {
         </Form.Group>
         <Button type="submit" variant="primary" className="w-100">Ingresar</Button>
       </Form>
+      <p>¿No tenés cuenta? <Link to="/register">Registrarse</Link></p>
     </Container>
   )
 }
