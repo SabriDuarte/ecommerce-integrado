@@ -7,7 +7,7 @@ const authorizeRole = require('../middleware/roleMiddleware');
 
 // 2. Rutas
 router.post('/register', authController.register);
-router.post('/login', authController.login);
+router.post('/login', authController.login); // 
 
 // Ruta protegida de ejemplo
 router.get('/profile', authenticateToken, (req, res) => {

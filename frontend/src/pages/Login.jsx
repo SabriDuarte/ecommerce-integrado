@@ -1,73 +1,43 @@
-import '../styles/Login.css';
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-
-
-
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import { login } from '../services/authService'
+import useAuthStore from '../store/authStore'
+import { useNavigate } from 'react-router-dom'
+import { Button, Form, Container } from 'react-bootstrap'
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const { login: setAuth } = useAuthStore()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-
+    e.preventDefault()
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', {
-        email,
-        password
-      });
-
-      const token = response.data.token;
-      localStorage.setItem('token', token);
-      alert('Login exitoso');
-
-      // Redirigir al catalogo
-      navigate('/products');
-
-    } catch (err) {
-      setError(err.response?.data?.message || 'Error al iniciar sesión');
+      const { user, token } = await login(email, password)
+      setAuth(user, token)
+      navigate('/dashboard')
+    } catch (error) {
+      alert('Login fallido. Verificá tus credenciales.',error)
     }
-  };
+  }
 
   return (
-    <div className= "login-container" >
-      <h2>Iniciar sesión</h2>
-
-      <form onSubmit={handleSubmit}>
-          <label>Email</label><br />
-          <input 
-            type="email" 
-            value={email}
-            onChange={e => setEmail(e.target.value)} 
-            required
-          />
-
-          <label>Contraseña</label><br />
-          <input 
-            type="password" 
-            value={password}
-            onChange={e => setPassword(e.target.value)} 
-            required
-          />
-
-        <button type="submit">Entrar</button>
-      </form>
-
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <p>
-        ¿No tenés cuenta? <Link to="/register">Registrate acá</Link>
-      </p>
-
-
-    </div>
-
-  );
+    <Container className="mt-5" style={{ maxWidth: '400px' }}>
+      <h2 className="mb-4 text-center">Login</h2>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3">
+          <Form.Label>Email</Form.Label>
+          <Form.Control value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Contraseña</Form.Label>
+          <Form.Control value={password} onChange={(e) => setPassword(e.target.value)} type="password" required />
+        </Form.Group>
+        <Button type="submit" variant="primary" className="w-100">Ingresar</Button>
+      </Form>
+    </Container>
+  )
 }
 
-export default Login;
+export default Login
+

@@ -1,27 +1,25 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-// Importamos React, necesario para definir componentes React
-import React from 'react';
-
-// Importamos el componente Login desde la carpeta pages
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
 import Login from './pages/Login';
-
-
-import Register from './pages/Register';
-
-import ProductCatalog from './pages/ProductCatalog';
+import Dashboard from './pages/Dashboard';
+import ProtectedRoute from './routes/ProtectedRoute';
+import Cart from './pages/Cart'
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/products" element={<ProductCatalog />} />
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
 export default App;
-// Exportamos el componente App para que pueda usarse en otros archivos (por ejemplo, index.jsx)
