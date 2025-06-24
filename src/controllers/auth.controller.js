@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 // 2. Controlador de registro
 exports.register = async (req, res) => {
+  console.log('REQ BODY:', req.body);
   const { name, email, password, role } = req.body; // ahora también recibimos el rol
 
   try {

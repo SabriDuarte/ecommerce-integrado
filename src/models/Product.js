@@ -1,5 +1,7 @@
+//Importa a mongoose
 const mongoose = require('mongoose');
 
+//Creamos el esquema del producto
 const productSchema = new mongoose.Schema({
   nombre: {
     type: String,
@@ -23,11 +25,7 @@ const productSchema = new mongoose.Schema({
   imagen: {
     type: String,
     default: ''
-  },
-  creadoEn: {
-    type: Date,
-    default: Date.now
   }
 });
-
+//exporta el modelo
 module.exports = mongoose.model('Product', productSchema);
