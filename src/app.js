@@ -1,3 +1,4 @@
+// Acá configuramos Express, se agregan middlewares y se importan rutas
 const express = require('express');
 const mongoose = require('mongoose');
 const productRoutes = require('./routes/product.routes');
