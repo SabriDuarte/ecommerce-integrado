@@ -1,34 +1,46 @@
 import { useCartStore } from '../store/cartStore'
-import { Container, Table, Button, Card} from 'react-bootstrap'
+import { Container, Table, Button } from 'react-bootstrap'
+import styles from './Cart.module.css'
 
 function Cart() {
-  const { cart, increaseQuantity, decreaseQuantity, removeFromCart, clearCart } = useCartStore()
+  const cart = useCartStore((state) => state.cart)
+  const removeFromCart = useCartStore((state) => state.removeFromCart)
+  const clearCart = useCartStore((state) => state.clearCart)
+
+  const total = cart.reduce((acc, item) => acc + item.precio, 0)
 
   return (
-    <Container className="mt-5">
-      <h2>Carrito de Compras</h2>
+    <Container className={styles.cartContainer}>
+      <h2 className="mb-4">🛒 Tu Carrito</h2>
+
       {cart.length === 0 ? (
-        <p>Tu carrito está vacío</p>
+        <p>No hay productos en el carrito.</p>
       ) : (
         <>
-           {cart.map((item) => (
-            <Card key={item._id} className="mb-3">
-              <Card.Body>
-                <Card.Title>{item.name}</Card.Title>
-                <Card.Text>Precio: ${item.price}</Card.Text>
-                <Card.Text>Cantidad: {item.quantity}</Card.Text>
-                <Button variant="secondary" onClick={() => decreaseQuantity(item._id)}>-</Button>{' '}
-                <Button variant="secondary" onClick={() => increaseQuantity(item._id)}>+</Button>{' '}
-                <Button variant="danger" onClick={() => removeFromCart(item._id)}>Eliminar</Button>
-              </Card.Body>
-            </Card>
-          ))}
-
-          <h4 className="mt-3">
-            Total: ${cart.reduce((acc, item) => acc + item.price * item.quantity, 0)}
-          </h4>
-
-          <Button variant="outline-danger" onClick={clearCart} className="mt-2">Vaciar carrito</Button>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.nombre}</td>
+                  <td>${item.precio}</td>
+                  <td>
+                    <Button variant="danger" size="sm" onClick={() => removeFromCart(item._id)}>
+                      Eliminar
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <h4 className="mt-3">Total: ${total}</h4>
+          <Button variant="outline-danger" onClick={clearCart}>Vaciar carrito</Button>
         </>
       )}
     </Container>
